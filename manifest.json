@@ -1,0 +1,28 @@
+{
+    "name": "Bookmark for Chrome",
+    "description": "A Bookmark tool for favourite websites",
+    "version": "1.0.0",
+    "manifest_version": 3,
+    "background": {
+        "service_worker": "background.js"
+    },
+    "permissions": [
+        "storage",
+        "tabs"
+    ],
+    "action": {
+        "default_icon": {
+            "16": "images/bookmark-star16.png",
+            "32": "images/bookmark-star32.png",
+            "128": "images/bookmark-star128.png"
+        },
+        "default_title": "Right click the icon for more options",
+        "default_popup": "popup.html"
+    },
+    "icons": {
+        "16": "images/bookmark-star16.png",
+        "32": "images/bookmark-star32.png",
+        "128": "images/bookmark-star128.png"
+    },
+    "options_page": "options.html"
+}

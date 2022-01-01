@@ -1,0 +1,53 @@
+#popup {
+    height: 100vh;
+    width: 300px;
+    background-color: #f0f8ff;
+}
+
+#addNewWebsite {
+    width: 90%;
+    background-color: #f5f5f5;
+    padding: 2px 5px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+#addNewWebsite input {
+    width: 79%;
+    font-size: 12px;
+}
+
+#addNewWebsite label {
+    font-size: 12px;
+}
+
+/* preview */
+#preview {
+    width: 90%;
+    height: 24px;
+    margin: 0 auto;
+    background-color: rgb(251, 238, 238, 0.5);
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+#previewIcon {
+    max-height: 20px;
+}
+
+#previewTitle {
+    font-size: 16px;
+    margin: 0;
+    padding: 0 2px;
+    line-height: 1.6;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+#add img {
+    width: 20px;
+    height: 20px;
+}
+/* end of preview */

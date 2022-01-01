@@ -4,15 +4,24 @@
    <link rel="stylesheet" href="popup.css">
 </head>
 <body>
-    <div id="addNewWebsite">
-       <label for="siteUrl">
-          URL
-          <input type="url" name="siteUrl" id="siteUrl">
-       </label>
-       <label for="siteTitle">
-          Title
-          <input type="text" name="siteTitle" id="siteTitle">
-       </label>
+    <div id="popup">
+      <div id="addNewWebsite">
+         <label for="siteUrl">
+            URL
+            <input type="url" name="siteUrl" id="siteUrl">
+         </label>
+         <label for="siteTitle">
+            Title
+            <input type="text" name="siteTitle" id="siteTitle">
+         </label>
+      </div>
+      <div id="preview">
+         <img id="previewIcon" src="" alt="">
+         <p id="previewTitle"></p>
+         <div id="add">
+            <img src="images/plus.png" alt="add to bookmarks">
+         </div>
+      </div>
     </div>
 </body>
 <script src="popup.js"></script>

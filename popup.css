@@ -6,10 +6,21 @@
 
 #addNewWebsite {
     width: 90%;
-    background-color: #f5f5f5;
     padding: 2px 5px;
     margin: 0 auto;
     text-align: center;
+    display: none;
+}
+
+#star {
+    width: 90%;
+    padding: 2px 5px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+#editNewWebsite {
+    margin-top: 15px;
 }
 
 #addNewWebsite input {
@@ -51,3 +62,64 @@
     height: 20px;
 }
 /* end of preview */
+
+/* favourites list */
+#favouritesListWrapper {
+    margin-top: 30px;
+}
+
+#singleFavWrapper {
+    display: flex;
+}
+
+.linkToFavourite {
+    text-decoration: none;
+    color: #000000;
+}
+
+.favouriteListItem {
+    display: flex;
+    justify-content: flex-start;
+    padding: 0 15px;
+    background-color: #ffffff;
+    width: 135%;
+    border-radius: 25px;
+    margin: 8px;
+}
+
+.favouriteListItem img {
+    max-height: 16px;
+    padding: 4px;
+}
+
+.favouriteListItem p {
+    font-size: 12px;
+    margin: 0;
+    padding: 0 2px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    line-height: 2;
+}
+
+.btnDeleteFav {
+    margin-left: 95px;
+    margin-top: 7px;
+    font-size: 14px;
+    text-align: center;
+    border-radius: 50%;
+    border: none;
+    color: #ff0000;
+    background-color: #ffffff;
+    width: 25px;
+    height: 25px;
+    transition: all 0.75s ease-in-out;
+}
+
+.btnDeleteFav:hover {
+    transform: scale(0.9);
+    transition: all 0.75s ease-in-out;
+    color: #ffffff;
+    background-color: #ee8787;
+}
+/* end of favourites list */

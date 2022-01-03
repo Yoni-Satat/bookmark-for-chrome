@@ -6,7 +6,6 @@ let previewTitle = document.querySelector('#previewTitle');
 let previewIcon = document.querySelector('#previewIcon');
 let addToFavourites = document.querySelector('#add');
 let favouritesListWrapper = document.querySelector('#favouritesListWrapper');
-let singleFavWrapper = document.querySelector('#singleFavWrapper');
 
 chrome.storage.sync.get(["favourites"], ({ favourites = [] }) => {
     renderFavourites(favourites)
@@ -70,6 +69,7 @@ createNewFavouriteItem = (favourite) => {
     let icon = document.createElement('img');
     let title = document.createElement('p');
     let btnDelete = document.createElement('button');
+    let singleFavWrapper = document.createElement('div');
 
     linkToSite.setAttribute('target', '_blank')
     linkToSite.setAttribute('href', favourite.url);
@@ -77,9 +77,11 @@ createNewFavouriteItem = (favourite) => {
     favouriteListItem.setAttribute('class', 'favouriteListItem')
     icon.setAttribute('src', favourite.favIconUrl);
     title.innerHTML = favourite.title;
-    btnDelete.setAttribute('id', `btnDelete-${favourite.url}`);
-    btnDelete.setAttribute('class', 'btnDeleteFav')
+    btnDelete.setAttribute('id', `${favourite.url}`);
+    btnDelete.setAttribute('class', 'btnDeleteFav');
+    btnDelete.addEventListener('click', deleteFavourite)
     btnDelete.innerHTML = 'X';
+    singleFavWrapper.setAttribute('id', 'singleFavWrapper');
 
     favouriteListItem.appendChild(icon);
     favouriteListItem.appendChild(title);
@@ -88,5 +90,25 @@ createNewFavouriteItem = (favourite) => {
     singleFavWrapper.appendChild(btnDelete);
     favouritesListWrapper.appendChild(singleFavWrapper);
 }
+
+deleteFavourite = (e) => {
+    let filtered = [];
+    chrome.storage.sync.get(["favourites"], ({ favourites = [] }) => {
+        for (fav of favourites) {
+            if (fav.url !== e.target.id) {
+                filtered.push(fav);
+            }
+        }
+        favouritesListWrapper.innerHTML = '';
+        chrome.storage.sync.set({ favourites: filtered });
+    });
+}
+
+star.addEventListener('click', () => {
+    console.log('add new website clicked');
+    addNewWebsite.style.display = 'block';
+})
+
+
 
 

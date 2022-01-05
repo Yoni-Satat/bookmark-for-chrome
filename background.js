@@ -1,6 +1,6 @@
 let favourites = [{
-    title: 'My Bookmarks',
-    url: 'https://www.example.com/',
+    title: 'Freepik',
+    url: 'https://www.flaticon.com/',
     favIconUrl: 'https://www.flaticon.com/'
 }];
 

@@ -1,8 +1,10 @@
 let siteUrl = document.querySelector('#siteUrl');
 let siteTitle = document.querySelector('#siteTitle');
 let addNewWebsite = document.querySelector('#addNewWebsite');
-let star = document.querySelector('#star');
+let starDiv = document.querySelector('#starDiv');
+let starIcon = document.querySelector('#starIcon');
 let previewTitle = document.querySelector('#previewTitle');
+let closePreview = document.querySelector('#closePreview');
 let previewIcon = document.querySelector('#previewIcon');
 let addToFavourites = document.querySelector('#add');
 let favouritesListWrapper = document.querySelector('#favouritesListWrapper');
@@ -26,7 +28,7 @@ getCurrentTab().then((tab) => {
     chrome.storage.sync.get(["favourites"], ({ favourites = [] }) => {
         for (fav of favourites) {
             if (fav.url === tab.url) {
-                star.innerHTML = `${fav.title} is already saved!`
+                starIcon.setAttribute('src', 'images/bookmark-star128.png');
             }
         }
     });
@@ -46,17 +48,15 @@ addToFavourites.addEventListener('click', () => {
         favourites.push(newBookmark);
         chrome.storage.sync.set({ favourites });
     });
-    // TODO: hide siteUrl, siteTitle, preview div after successful save to storage
+    addNewWebsite.style.display = 'none';
+    starIcon.setAttribute('src', 'images/bookmark-star128.png');
+    starDiv.style.display = 'block';
 });
 
 chrome.storage.onChanged.addListener(function (changes) {
-    let index = changes.favourites.newValue.length - 1;
-    console.log(`index: ${index}`);
-    if (index >= 0) {
-        let favourites = changes.favourites.newValue;
-        let newItemToRender = favourites.at(index);
-        createNewFavouriteItem(newItemToRender);
-    }
+    let favourites = changes.favourites.newValue;
+    favouritesListWrapper.innerHTML = '';
+    renderFavourites(favourites);
 });
 
 renderFavourites = (favourites) => {
@@ -66,6 +66,7 @@ renderFavourites = (favourites) => {
 }
 
 createNewFavouriteItem = (favourite) => {
+    let favTitle = favourite.title.slice(0, 35)
     let linkToSite = document.createElement('a');
     let favouriteListItem = document.createElement('div');
     let icon = document.createElement('img');
@@ -78,7 +79,7 @@ createNewFavouriteItem = (favourite) => {
     linkToSite.setAttribute('class', 'linkToFavourite');
     favouriteListItem.setAttribute('class', 'favouriteListItem')
     icon.setAttribute('src', favourite.favIconUrl);
-    title.innerHTML = favourite.title;
+    title.innerHTML = favTitle;
     btnDelete.setAttribute('id', `${favourite.url}`);
     btnDelete.setAttribute('class', 'btnDeleteFav');
     btnDelete.addEventListener('click', deleteFavourite)
@@ -101,15 +102,26 @@ deleteFavourite = (e) => {
                 filtered.push(fav);
             }
         }
-        favouritesListWrapper.innerHTML = '';
+        starIcon.setAttribute('src', 'images/white-star512.png');
         chrome.storage.sync.set({ favourites: filtered });
     });
 }
 
-star.addEventListener('click', () => {
+starDiv.addEventListener('click', () => {
     console.log('add new website clicked');
     addNewWebsite.style.display = 'block';
-})
+    starDiv.style.display = 'none';
+});
+
+editFavourite = (favourite) => {
+    console.log(favourite);
+
+};
+
+closePreview.addEventListener('click', () => {
+    starDiv.style.display = 'block';
+    addNewWebsite.style.display = 'none';
+});
 
 
 

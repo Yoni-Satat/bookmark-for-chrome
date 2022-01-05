@@ -52,9 +52,11 @@ addToFavourites.addEventListener('click', () => {
 chrome.storage.onChanged.addListener(function (changes) {
     let index = changes.favourites.newValue.length - 1;
     console.log(`index: ${index}`);
-    let favourites = changes.favourites.newValue;
-    let newItemToRender = favourites.at(index);
-    createNewFavouriteItem(newItemToRender);
+    if (index >= 0) {
+        let favourites = changes.favourites.newValue;
+        let newItemToRender = favourites.at(index);
+        createNewFavouriteItem(newItemToRender);
+    }
 });
 
 renderFavourites = (favourites) => {

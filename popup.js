@@ -8,6 +8,7 @@ let closePreview = document.querySelector('#closePreview');
 let previewIcon = document.querySelector('#previewIcon');
 let addToFavourites = document.querySelector('#add');
 let favouritesListWrapper = document.querySelector('#favouritesListWrapper');
+let editFav = document.querySelector('#editFav');
 
 chrome.storage.sync.get(["favourites"], ({ favourites = [] }) => {
     renderFavourites(favourites)
@@ -29,6 +30,8 @@ getCurrentTab().then((tab) => {
         for (fav of favourites) {
             if (fav.url === tab.url) {
                 starIcon.setAttribute('src', 'images/bookmark-star128.png');
+            } else {
+                starIcon.setAttribute('src', 'images/white-star512.png');
             }
         }
     });
@@ -108,15 +111,21 @@ deleteFavourite = (e) => {
 }
 
 starDiv.addEventListener('click', () => {
-    console.log('add new website clicked');
+    chrome.storage.sync.get(["favourites"], ({ favourites = [] }) => {
+        for (fav of favourites) {
+            if (siteUrl.value === fav.url) {
+                editFav.style.display = 'block';
+                addToFavourites.style.display = 'none';
+            }
+        }
+    });
     addNewWebsite.style.display = 'block';
     starDiv.style.display = 'none';
 });
 
-editFavourite = (favourite) => {
-    console.log(favourite);
-
-};
+editFav.addEventListener('click', () => {
+    console.log('editFav div button clicked');
+});
 
 closePreview.addEventListener('click', () => {
     starDiv.style.display = 'block';

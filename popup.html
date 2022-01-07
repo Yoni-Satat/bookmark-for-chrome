@@ -5,6 +5,11 @@
 </head>
 <body>
     <div id="popup">
+
+      <div id="starDiv">
+         <img id="starIcon" src="images/white-star512.png" alt="add to favourites" style="max-height: 20px;">
+      </div>
+
       <div id="addNewWebsite">
          <div id="editNewWebsite">
             <label for="siteUrl">
@@ -19,23 +24,18 @@
          <div id="preview">
             <img id="previewIcon" src="" alt="">
             <p id="previewTitle"></p>
-            <div id="add" class="previewButton">
+            <div id="addFav" class="previewButton">
                <img src="images/plus.png" alt="add to bookmarks">
             </div>
             <div id="editFav" class="previewButton">
                <img src="images/edit512.png" alt="edit favourite bookmark">
             </div>
-            <div id="closePreview" class="previewButton">
+            <!-- <div id="closePreview" class="previewButton">
                <img src="images/close512.png" alt="close preview without saving">
-            </div>
+            </div> -->
          </div>
       </div>
       
-
-      <div id="starDiv">
-         <img id="starIcon" src="images/white-star512.png" alt="add to favourites" style="max-height: 20px;">
-      </div>
-
       <div id="favouritesListWrapper">
             
       </div>
@@ -43,4 +43,5 @@
     </div>
 </body>
 <script src="popup.js"></script>
+<script src="favItem.js"></script>
 </html>

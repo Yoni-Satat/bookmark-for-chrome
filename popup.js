@@ -4,11 +4,13 @@ let addNewWebsite = document.querySelector('#addNewWebsite');
 let starDiv = document.querySelector('#starDiv');
 let starIcon = document.querySelector('#starIcon');
 let previewTitle = document.querySelector('#previewTitle');
-let closePreview = document.querySelector('#closePreview');
+// let closePreview = document.querySelector('#closePreview');
 let previewIcon = document.querySelector('#previewIcon');
-let addToFavourites = document.querySelector('#add');
+let addFav = document.querySelector('#addFav');
 let favouritesListWrapper = document.querySelector('#favouritesListWrapper');
 let editFav = document.querySelector('#editFav');
+
+addNewWebsite.style.visibility = 'hidden';
 
 chrome.storage.sync.get(["favourites"], ({ favourites = [] }) => {
     renderFavourites(favourites)
@@ -41,7 +43,7 @@ siteTitle.addEventListener('input', (e) => {
     previewTitle.innerHTML = e.target.value
 });
 
-addToFavourites.addEventListener('click', () => {
+addFav.addEventListener('click', () => {
     let newBookmark = {
         title: previewTitle.innerHTML,
         url: siteUrl.value,
@@ -68,35 +70,6 @@ renderFavourites = (favourites) => {
     });
 }
 
-createNewFavouriteItem = (favourite) => {
-    let favTitle = favourite.title.slice(0, 35)
-    let linkToSite = document.createElement('a');
-    let favouriteListItem = document.createElement('div');
-    let icon = document.createElement('img');
-    let title = document.createElement('p');
-    let btnDelete = document.createElement('button');
-    let singleFavWrapper = document.createElement('div');
-
-    linkToSite.setAttribute('target', '_blank')
-    linkToSite.setAttribute('href', favourite.url);
-    linkToSite.setAttribute('class', 'linkToFavourite');
-    favouriteListItem.setAttribute('class', 'favouriteListItem')
-    icon.setAttribute('src', favourite.favIconUrl);
-    title.innerHTML = favTitle;
-    btnDelete.setAttribute('id', `${favourite.url}`);
-    btnDelete.setAttribute('class', 'btnDeleteFav');
-    btnDelete.addEventListener('click', deleteFavourite)
-    btnDelete.innerHTML = 'X';
-    singleFavWrapper.setAttribute('id', 'singleFavWrapper');
-
-    favouriteListItem.appendChild(icon);
-    favouriteListItem.appendChild(title);
-    linkToSite.appendChild(favouriteListItem);
-    singleFavWrapper.appendChild(linkToSite);
-    singleFavWrapper.appendChild(btnDelete);
-    favouritesListWrapper.appendChild(singleFavWrapper);
-}
-
 deleteFavourite = (e) => {
     let filtered = [];
     chrome.storage.sync.get(["favourites"], ({ favourites = [] }) => {
@@ -115,22 +88,41 @@ starDiv.addEventListener('click', () => {
         for (fav of favourites) {
             if (siteUrl.value === fav.url) {
                 editFav.style.display = 'block';
-                addToFavourites.style.display = 'none';
+                addFav.style.display = 'none';
             }
         }
     });
-    addNewWebsite.style.display = 'block';
-    starDiv.style.display = 'none';
+    addNewWebsite.style.visibility = addNewWebsite.style.visibility === 'hidden' ? '' : 'hidden';
 });
 
 editFav.addEventListener('click', () => {
-    console.log('editFav div button clicked');
+    let updatedFav = {};
+
+    getCurrentTab().then((tab) => {
+        chrome.storage.sync.get(["favourites"], ({ favourites }) => {
+            for (let i = 0; i < favourites.length; i++) {
+                if (favourites[i].url === tab.url) {
+                    console.log(`found a match at index ${i}`);
+                    updatedFav = {
+                        url: siteUrl.value,
+                        title: siteTitle.value,
+                        favIconUrl: tab.favIconUrl
+                    }
+                    favourites[i] = updatedFav;
+                }
+            }
+            console.log(favourites);
+            chrome.storage.sync.set({ favourites });
+            siteTitle.value = '';
+            siteUrl.value = '';
+        });
+    });
 });
 
-closePreview.addEventListener('click', () => {
-    starDiv.style.display = 'block';
-    addNewWebsite.style.display = 'none';
-});
+// closePreview.addEventListener('click', () => {
+//     starDiv.style.display = 'block';
+//     addNewWebsite.style.display = 'none';
+// });
 
 
 

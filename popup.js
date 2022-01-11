@@ -4,11 +4,10 @@ let addNewWebsite = document.querySelector('#addNewWebsite');
 let starDiv = document.querySelector('#starDiv');
 let starIcon = document.querySelector('#starIcon');
 let previewTitle = document.querySelector('#previewTitle');
-// let closePreview = document.querySelector('#closePreview');
 let previewIcon = document.querySelector('#previewIcon');
 let addFav = document.querySelector('#addFav');
 let favouritesListWrapper = document.querySelector('#favouritesListWrapper');
-let editFav = document.querySelector('#editFav');
+let updateFav = document.querySelector('#updateFav');
 
 addNewWebsite.style.visibility = 'hidden';
 
@@ -30,8 +29,10 @@ getCurrentTab().then((tab) => {
     previewIcon.alt = tab.title;
     chrome.storage.sync.get(["favourites"], ({ favourites = [] }) => {
         for (fav of favourites) {
+            console.log(`fav.url: ${fav.url}\ntab.url: ${tab.url}\n${fav.url === tab.url}`);
             if (fav.url === tab.url) {
                 starIcon.setAttribute('src', 'images/bookmark-star128.png');
+                console.log('yay');
             } else {
                 starIcon.setAttribute('src', 'images/white-star512.png');
             }
@@ -53,9 +54,8 @@ addFav.addEventListener('click', () => {
         favourites.push(newBookmark);
         chrome.storage.sync.set({ favourites });
     });
-    addNewWebsite.style.display = 'none';
+    addNewWebsite.style.visibility = 'hidden';
     starIcon.setAttribute('src', 'images/bookmark-star128.png');
-    starDiv.style.display = 'block';
 });
 
 chrome.storage.onChanged.addListener(function (changes) {
@@ -72,30 +72,41 @@ renderFavourites = (favourites) => {
 
 deleteFavourite = (e) => {
     let filtered = [];
+    let hideForm = false;
     chrome.storage.sync.get(["favourites"], ({ favourites = [] }) => {
         for (fav of favourites) {
             if (fav.url !== e.target.id) {
                 filtered.push(fav);
+                hideForm = true;
             }
         }
         starIcon.setAttribute('src', 'images/white-star512.png');
+        if (hideForm) { addNewWebsite.style.visibility = 'hidden' };
         chrome.storage.sync.set({ favourites: filtered });
     });
 }
 
 starDiv.addEventListener('click', () => {
+    getCurrentTab().then((tab) => {
+        siteTitle.value = tab.title;
+        siteUrl.value = tab.url;
+    });
     chrome.storage.sync.get(["favourites"], ({ favourites = [] }) => {
         for (fav of favourites) {
             if (siteUrl.value === fav.url) {
-                editFav.style.display = 'block';
+                updateFav.style.display = 'block';
                 addFav.style.display = 'none';
+                siteTitle.value = fav.title;
+            } else {
+                updateFav.style.display = 'none';
+                addFav.style.display = 'block';
             }
         }
     });
     addNewWebsite.style.visibility = addNewWebsite.style.visibility === 'hidden' ? '' : 'hidden';
 });
 
-editFav.addEventListener('click', () => {
+updateFav.addEventListener('click', () => {
     let updatedFav = {};
 
     getCurrentTab().then((tab) => {
@@ -109,20 +120,17 @@ editFav.addEventListener('click', () => {
                         favIconUrl: tab.favIconUrl
                     }
                     favourites[i] = updatedFav;
+                } else {
+                    console.log('url is changed...');
                 }
             }
             console.log(favourites);
             chrome.storage.sync.set({ favourites });
-            siteTitle.value = '';
-            siteUrl.value = '';
+            addNewWebsite.style.visibility = 'hidden';
         });
     });
 });
 
-// closePreview.addEventListener('click', () => {
-//     starDiv.style.display = 'block';
-//     addNewWebsite.style.display = 'none';
-// });
 
 
 

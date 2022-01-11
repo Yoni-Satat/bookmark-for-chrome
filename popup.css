@@ -31,6 +31,21 @@
     font-size: 12px;
 }
 
+#tooltip {
+    position: absolute;
+    width: 83%;
+    padding: 4px;
+    background-color: rgb(77, 131, 77, 0.9);
+    border-radius: 5px;
+    font-size: 14px;
+    color: white;
+    margin: -54px auto;
+    display: none;
+}
+
+#siteUrl:hover #tooltip {
+    display: block;
+}
 /* preview */
 #preview {
     width: 90%;

@@ -1,5 +1,6 @@
 let siteUrl = document.querySelector('#siteUrl');
 let siteTitle = document.querySelector('#siteTitle');
+let tooltip = document.querySelector('#tooltip');
 let addNewWebsite = document.querySelector('#addNewWebsite');
 let starDiv = document.querySelector('#starDiv');
 let starIcon = document.querySelector('#starIcon');
@@ -44,6 +45,15 @@ siteTitle.addEventListener('input', (e) => {
     previewTitle.innerHTML = e.target.value
 });
 
+siteUrl.addEventListener('mouseover', () => {
+    console.log('hovering over url input');
+    tooltip.style.display = 'block';
+});
+
+siteUrl.addEventListener('mouseout', () => {
+    tooltip.style.display = 'none';
+});
+
 addFav.addEventListener('click', () => {
     let newBookmark = {
         title: previewTitle.innerHTML,
@@ -70,22 +80,6 @@ renderFavourites = (favourites) => {
     });
 }
 
-deleteFavourite = (e) => {
-    let filtered = [];
-    let hideForm = false;
-    chrome.storage.sync.get(["favourites"], ({ favourites = [] }) => {
-        for (fav of favourites) {
-            if (fav.url !== e.target.id) {
-                filtered.push(fav);
-                hideForm = true;
-            }
-        }
-        starIcon.setAttribute('src', 'images/white-star512.png');
-        if (hideForm) { addNewWebsite.style.visibility = 'hidden' };
-        chrome.storage.sync.set({ favourites: filtered });
-    });
-}
-
 starDiv.addEventListener('click', () => {
     getCurrentTab().then((tab) => {
         siteTitle.value = tab.title;
@@ -106,6 +100,22 @@ starDiv.addEventListener('click', () => {
     addNewWebsite.style.visibility = addNewWebsite.style.visibility === 'hidden' ? '' : 'hidden';
 });
 
+deleteFavourite = (e) => {
+    let filtered = [];
+    let hideForm = false;
+    chrome.storage.sync.get(["favourites"], ({ favourites = [] }) => {
+        for (fav of favourites) {
+            if (fav.url !== e.target.id) {
+                filtered.push(fav);
+                hideForm = true;
+            }
+        }
+        starIcon.setAttribute('src', 'images/white-star512.png');
+        if (hideForm) { addNewWebsite.style.visibility = 'hidden' };
+        chrome.storage.sync.set({ favourites: filtered });
+    });
+}
+
 updateFav.addEventListener('click', () => {
     let updatedFav = {};
 
@@ -120,8 +130,6 @@ updateFav.addEventListener('click', () => {
                         favIconUrl: tab.favIconUrl
                     }
                     favourites[i] = updatedFav;
-                } else {
-                    console.log('url is changed...');
                 }
             }
             console.log(favourites);
